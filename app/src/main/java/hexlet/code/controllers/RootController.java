@@ -4,5 +4,5 @@ import io.javalin.http.Handler;
 
 public final class RootController {
 
-    public static Handler welcome = ctx -> ctx.html("<p>Hello World</p>");
+    public static final Handler WELCOME = ctx -> ctx.render("index.html");
 }
