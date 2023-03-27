@@ -7,13 +7,18 @@ import io.ebean.Database;
 import io.javalin.Javalin;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static java.net.HttpURLConnection.HTTP_MOVED_TEMP;
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -31,14 +36,18 @@ public final class AppTest {
     private static String baseUrl;
     private static Url existingUrl = new Url("https://www.testexample.com");
     private static Database database;
+    private static MockWebServer server;
+    private static final String MOCK_HTML = "src/test/resources/mock_index.html";
 
     @BeforeAll
-    public static void beforeAll() {
+    public static void beforeAll() throws IOException {
         app = App.getApp();
         app.start(0);
         int port = app.port();
         baseUrl = "http://localhost:" + port;
         database = DB.getDefault();
+        server = new MockWebServer();
+        server.start();
     }
 
     @AfterAll
@@ -112,5 +121,46 @@ public final class AppTest {
             assertThat(responseNotFound.getStatus()).isEqualTo(HttpURLConnection.HTTP_NOT_FOUND);
             assertThat(responseNotFound.getBody()).contains("404: Id not found");
         }
+    }
+
+    @Test
+    void testUrlCheck() throws IOException {
+        String testPage = Files.readString(Paths.get(MOCK_HTML));
+
+        String mockUrl = server.url("/").toString();
+        mockUrl = mockUrl.substring(0, mockUrl.length() - 1);
+        server.enqueue(new MockResponse().setBody(testPage));
+
+        HttpResponse<String> responsePost = Unirest
+                .post(baseUrl + "/urls")
+                .field("url", mockUrl)
+                .asEmpty();
+
+        assertThat(responsePost.getStatus()).isEqualTo(HTTP_MOVED_TEMP);
+        assertThat(responsePost.getHeaders().getFirst("Location")).isEqualTo("/urls");
+
+        Long mockUrlId = new QUrl()
+                .name.equalTo(mockUrl)
+                .findOneOrEmpty()
+                .get()
+                .getId();
+
+        assertThat(mockUrlId).isNotNull();
+
+        HttpResponse<String> checkUrl = Unirest
+                .post(baseUrl + "/urls/" + mockUrlId + "/checks/")
+                .asEmpty();
+
+        assertThat(checkUrl.getStatus()).isEqualTo(HttpURLConnection.HTTP_MOVED_TEMP);
+        assertThat(checkUrl.getHeaders().getFirst("Location")).isEqualTo("/urls/" + mockUrlId);
+
+        HttpResponse<String> urlsResponse = Unirest
+                .get(baseUrl + "/urls/" + mockUrlId)
+                .asString();
+
+        assertThat(urlsResponse.getBody()).contains(mockUrl);
+        assertThat(urlsResponse.getBody()).contains("Mockpage description");
+        assertThat(urlsResponse.getBody()).contains("Mockpage title");
+        assertThat(urlsResponse.getBody()).contains("First-level header");
     }
 }

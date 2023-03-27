@@ -39,14 +39,14 @@
         <th class="col-2">Дата проверки</th>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>200</td>
-          <td>Example Domain</td>
-          <td>Example Domain</td>
-          <td></td>
-          <td>26/03/2023 10:31</td>
-        </tr>
+      <tr th:each="check : ${checks}" th:object="${check}">
+        <td th:text="*{id}"></td>
+        <td th:text="*{statusCode}"></td>
+        <td class="text-truncate" style="max-width: 50px;" th:text="*{title}"></td>
+        <td class="text-truncate" style="max-width: 30px;" th:text="*{h1}"></td>
+        <td class="text-truncate" style="max-width: 50px;" th:text="*{description}"></td>
+        <td th:text="${#temporals.format(check.getCreatedAt(), 'dd-MM-yyyy HH:mm')}"></td>
+      </tr>
       </tbody>
     </table>
   </div>

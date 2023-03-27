@@ -8,8 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.net.URL;
 import java.time.Instant;
+import java.util.List;
 
 
 @Getter
@@ -25,6 +27,9 @@ public final class Url extends Model {
 
     @WhenCreated
     private Instant createdAt;
+
+    @OneToMany
+    private List<UrlCheck> urlChecks;
 
     public Url(String name) {
         this.name = name;

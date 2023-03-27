@@ -29,18 +29,13 @@
 </nav>
 
 <main class="flex-grow-1">
-  <div    th:if="${session.flash}"
-          th:class="'rounded-0 m-0 alert alert-dismissible fade show alert-' + ${ctx.consumeSessionAttribute('flash-type')}"
-          role="alert">
+  <div th:if="${session.flash}"
+       th:class="'rounded-0 m-0 alert alert-dismissible fade show alert-' + ${ctx.consumeSessionAttribute('flash-type')}"
+       role="alert">
     <p class="m-0" th:text="${ctx.consumeSessionAttribute('flash')}"></p>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-  <div class="container mt-4">
-    <h1 class="my-4">
-      <section layout:fragment="header"></section>
-    </h1>
     <section layout:fragment="content"></section>
-  </div>
 </main>
 
 <footer class="footer border-top py-3 mt-5 bg-light">

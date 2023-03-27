@@ -9,6 +9,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import static hexlet.code.controllers.RootController.WELCOME;
 import static hexlet.code.controllers.UrlController.ADD_URL;
+import static hexlet.code.controllers.UrlController.CHECK;
 import static hexlet.code.controllers.UrlController.LIST_URLS;
 import static hexlet.code.controllers.UrlController.SHOW_URL;
 
@@ -53,6 +54,7 @@ public final class App {
                 get(LIST_URLS);
                 post(ADD_URL);
                 get("{id}", SHOW_URL);
+                post("{id}/checks", CHECK);
             });
         });
 
