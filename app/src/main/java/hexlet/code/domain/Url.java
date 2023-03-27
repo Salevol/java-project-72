@@ -26,7 +26,7 @@ public final class Url extends Model {
     @WhenCreated
     private Instant createdAt;
 
-    Url(String name) {
+    public Url(String name) {
         this.name = name;
     }
 

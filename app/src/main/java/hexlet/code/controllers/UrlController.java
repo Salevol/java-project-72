@@ -68,7 +68,11 @@ public class UrlController {
         Url url = new QUrl()
                 .id.equalTo(id)
                 .findOne();
-
+        if (Objects.isNull(url)) {
+            ctx.status(404);
+            ctx.html("<h1>404: Id not found</h1>");
+            return;
+        }
         ctx.attribute("url", url);
         ctx.render("urls/show.html");
     };
