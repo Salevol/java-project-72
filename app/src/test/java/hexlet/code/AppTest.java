@@ -68,7 +68,7 @@ public final class AppTest {
         void testIndex() {
             HttpResponse<String> response = Unirest.get(baseUrl).asString();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getBody()).contains("Webpage analyzer");
+            assertThat(response.getBody()).contains("Анализатор страниц");
         }
 
     }
@@ -93,7 +93,7 @@ public final class AppTest {
 
             assertThat(response.getStatus()).isEqualTo(HTTP_OK);
             assertThat(body).contains(testUrl);
-            assertThat(body).contains("Page successfully added");
+            assertThat(body).contains("Страница успешно добавлена");
 
             Url actualUrl = new QUrl()
                     .name.equalTo(testUrl)

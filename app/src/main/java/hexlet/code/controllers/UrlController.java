@@ -74,7 +74,7 @@ public class UrlController {
 
         preparedUrl.save();
 
-        ctx.sessionAttribute("flash", "Page successfully added");
+        ctx.sessionAttribute("flash", "Страница успешно добавлена");
         ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls");
     };

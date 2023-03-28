@@ -84,3 +84,10 @@ task generateMigrations(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'hexlet.code.MigrationGenerator'
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+tasks.withType(Test) {
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
