@@ -114,6 +114,7 @@ public class UrlController {
         } catch (Exception e) {
             ctx.sessionAttribute("flash", "Страница не существует");
             ctx.sessionAttribute("flash-type", "danger");
+            ctx.redirect("/urls/" + id);
             return;
         }
 
@@ -132,5 +133,6 @@ public class UrlController {
         ctx.sessionAttribute("flash", "Страница успешно проверена");
         ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
+
     };
 }

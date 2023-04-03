@@ -6,4 +6,4 @@
 
 <a href="https://java-project-72-production-3957.up.railway.app/">Page Analyzer</a> – сайт, который анализирует указанные страницы на SEO пригодность.
 
-To run use "make run" or "docker compose up"
+To run use `make run` or `docker compose up`

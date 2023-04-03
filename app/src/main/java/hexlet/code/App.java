@@ -49,14 +49,12 @@ public final class App {
     private static void addRoutes(Javalin app) {
         app.get("/", WELCOME);
 
-        app.routes(() -> {
-            path("urls", () -> {
-                get(LIST_URLS);
-                post(ADD_URL);
-                get("{id}", SHOW_URL);
-                post("{id}/checks", CHECK);
-            });
-        });
+        app.routes(() -> path("urls", () -> {
+            get(LIST_URLS);
+            post(ADD_URL);
+            get("{id}", SHOW_URL);
+            post("{id}/checks", CHECK);
+        }));
 
     }
 
